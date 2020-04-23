@@ -15,13 +15,13 @@ def read_uuid(record, column):
     return record
 
 
-class IssueViewBuilder:
+class FireEntryViewBuilder:
 
-    _q = """SELECT description,
-                 reporter_email,
-                 reporter_name
-            FROM issues
-            WHERE issue_id = :id"""
+    _q = """SELECT detection_date,
+                 lat,
+                 lon
+            FROM fires
+            WHERE fid = :id"""
 
     def __init__(self, db):
         self.db = db
@@ -33,13 +33,13 @@ class IssueViewBuilder:
         return dict(record)
 
 
-class IssueListBuilder:
+class FireEntryListBuilder:
 
-    _q = """SELECT issue_id,
-                 description,
-                 reporter_email,
-                 reporter_name
-            FROM issues"""
+    _q = """SELECT fid,
+                 lat,
+                 lon,
+                 detection_date
+            FROM fires"""
 
     def __init__(self, db):
         self.db = db
@@ -47,13 +47,13 @@ class IssueListBuilder:
     def fetch(self):
         session = self.db.get_session()
         query = session.execute(
-            "SELECT issue_id, description, reporter_email, reporter_name "
-            + " FROM issues"
+            "SELECT fid, lat, lon, detection_date "
+            + " FROM fires"
         )
 
         result = []
         for r in query.fetchall():
-            r = read_uuid(r, "issue_id")
+            r = read_uuid(r, "fid")
             result.append(r)
 
         return result

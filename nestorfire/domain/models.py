@@ -1,4 +1,5 @@
 import abc
+import datetime
 from uuid import UUID
 from .messages import FireEntryCreated
 
@@ -8,3 +9,4 @@ class FireEntry:
         self.fid = fid
         self.lat = lat
         self.lon = lon
+        self.detection_date = datetime.datetime.now()

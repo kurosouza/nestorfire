@@ -1,27 +1,27 @@
 import abc
 from collections import defaultdict
 from uuid import UUID
-from .model import Issue
+from .models import FireEntry
 
 
-class IssueNotFoundException(Exception):
+class FireEntryNotFoundException(Exception):
     pass
 
 
-class IssueLog(abc.ABC):
+class FireEntryLog(abc.ABC):
     @abc.abstractmethod
-    def add(self, issue: Issue) -> None:
+    def add(self, fire_entry: FireEntry) -> None:
         pass
 
     @abc.abstractmethod
-    def _get(self, id: UUID) -> Issue:
+    def _get(self, id: UUID) -> FireEntry:
         pass
 
-    def get(self, id: UUID) -> Issue:
-        issue = self._get(id)
-        if issue is None:
-            raise IssueNotFoundException()
-        return issue
+    def get(self, id: UUID) -> FireEntry:
+        fire_entry = self._get(id)
+        if fire_entry is None:
+            raise FireEntryNotFoundException()
+        return fire_entry
 
 
 class UnitOfWork(abc.ABC):
@@ -43,7 +43,7 @@ class UnitOfWork(abc.ABC):
 
     @property
     @abc.abstractmethod
-    def issues(self):
+    def fires(self):
         pass
 
 
@@ -75,7 +75,7 @@ class MessageBus:
         subscribers.append(handler)
 
 
-class IssueViewBuilder:
+class FireEntryViewBuilder:
     @abc.abstractmethod
     def fetch(self, id):
         pass

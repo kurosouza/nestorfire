@@ -9,6 +9,7 @@ from sqlalchemy import (
     MetaData,
     String,
     Integer,
+    Float,
     Text,
     ForeignKey,
     create_engine,
@@ -21,9 +22,9 @@ import sqlalchemy.orm.exc
 from sqlalchemy_utils.functions import create_database, drop_database
 from sqlalchemy_utils.types.uuid import UUIDType
 
-from nestorfire.domain.model import Issue, IssueReporter, Assignment
+from nestorfire.domain.models import FireEntry
 from nestorfire.domain.ports import (
-    IssueLog,
+    FireEntryLog,
     UnitOfWork,
     UnitOfWorkManager,
 )
@@ -38,15 +39,15 @@ class SqlAlchemyUnitOfWorkManager(UnitOfWorkManager):
         return SqlAlchemyUnitOfWork(self.session_maker, self.bus)
 
 
-class IssueRepository(IssueLog):
+class FireEntryRepository(FireEntryLog):
     def __init__(self, session):
         self._session = session
 
-    def add(self, issue: Issue) -> None:
-        self._session.add(issue)
+    def add(self, fire_entry: FireEntry) -> None:
+        self._session.add(fire_entry)
 
-    def _get(self, issue_id) -> Issue:
-        return self._session.query(Issue).filter_by(id=issue_id).first()
+    def _get(self, fid) -> FireEntry:
+        return self._session.query(FireEntry).filter_by(fid=fid).first()
 
 
 class SqlAlchemyUnitOfWork(UnitOfWork):
@@ -89,8 +90,8 @@ class SqlAlchemyUnitOfWork(UnitOfWork):
             self.bus.handle(e)
 
     @property
-    def issues(self):
-        return IssueRepository(self.session)
+    def fires(self):
+        return FireEntryRepository(self.session)
 
 
 class SqlAlchemy:
@@ -119,51 +120,19 @@ class SqlAlchemy:
     def configure_mappings(self):
         self.metadata = MetaData(self.engine)
 
-        IssueReporter.__composite_values__ = lambda i: (i.name, i.email)
-        issues = Table(
-            "issues",
-            self.metadata,
-            Column("pk", Integer, primary_key=True),
-            Column("issue_id", UUIDType),
-            Column("reporter_name", String(50)),
-            Column("reporter_email", String(50)),
-            Column("description", Text),
+        fires = Table("fires", self.metadata,
+            Column("fid", UUIDType, primary_key = True),
+            Column("lat", Float),
+            Column("lon", Float),
+            Column("detection_date", String(50))
         )
 
-        assignments = Table(
-            "assignments",
-            self.metadata,
-            Column("pk", Integer, primary_key=True),
-            Column("id", UUIDType),
-            Column("fk_assignment_id", UUIDType, ForeignKey("issues.issue_id")),
-            Column("assigned_by", String(50)),
-            Column("assigned_to", String(50)),
-        )
-
-        mapper(
-            Issue,
-            issues,
-            properties={
-                "__pk": issues.c.pk,
-                "id": issues.c.issue_id,
-                "description": issues.c.description,
-                "reporter": composite(
-                    IssueReporter, issues.c.reporter_name, issues.c.reporter_email
-                ),
-                "_assignments": relationship(Assignment, backref="issue"),
-            },
-        ),
-
-        mapper(
-            Assignment,
-            assignments,
-            properties={
-                "__pk": assignments.c.pk,
-                "id": assignments.c.id,
-                "assigned_to": assignments.c.assigned_to,
-                "assigned_by": assignments.c.assigned_by,
-            },
-        )
+        mapper(FireEntry, fires, properties = {
+            "fid": fires.c.fid,
+            "lat": fires.c.lat,
+            "lon": fires.c.lon,
+            "detection_date": fires.c.detection_date
+        })
 
 
 class SqlAlchemySessionContext:

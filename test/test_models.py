@@ -9,4 +9,5 @@ def test_can_create_fire_entry():
     fire_entry = FireEntry(fid = fid, lat = lat, lon = lon)
     assert fire_entry.lat == lat
     assert fire_entry.lon == lon
+    assert fire_entry.fid == fid
     

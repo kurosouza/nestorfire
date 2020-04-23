@@ -29,6 +29,16 @@ class AddFireEntry(NamedTuple):
     created_on: str
 
 
+@command
+class RemoveFireEntry(NamedTuple):
+    fid: UUID
+
+
 @event
 class FireEntryCreated(NamedTuple):
+    fid: UUID
+
+
+@event
+class FireEntryRemoved(NamedTuple):
     fid: UUID

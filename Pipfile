@@ -7,11 +7,13 @@ verify_ssl = true
 pytest = "*"
 flake8 = "*"
 black = "==19.10b0"
+httpie = "*"
 
 [packages]
 flask = "*"
 sqlalchemy = "*"
 pyjwt = "*"
+sqlalchemy-utils = "*"
 
 [requires]
 python_version = "3.8"
