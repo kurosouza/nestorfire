@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+    api:
+        build: .
+        image: api
+        container_name: api
+        ports:
+            - 5000:5000
+        command: flask run -h 0.0.0.0
+        environment: 
+            - FLASK_APP=/usr/src/app/nestorfire/adapters/http/endpoints.py
+            - FLASK_ENV=development
+        volumes:
+            - .:/usr/src/app
