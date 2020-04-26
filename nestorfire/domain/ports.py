@@ -3,6 +3,8 @@ from collections import defaultdict
 from uuid import UUID
 from .models import FireEntry
 
+from typing import List
+
 
 class FireEntryNotFoundException(Exception):
     pass
@@ -78,4 +80,11 @@ class MessageBus:
 class FireEntryViewBuilder:
     @abc.abstractmethod
     def fetch(self, id):
+        pass
+
+
+class FireDataSource(abc.ABC):
+
+    @abc.abstractmethod
+    def get_data(self) -> List[FireEntry]:
         pass
