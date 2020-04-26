@@ -13,3 +13,6 @@ services:
             - FLASK_ENV=development
         volumes:
             - .:/usr/src/app
+
+    redis:
+        image: redis:5.0.7-alpine
