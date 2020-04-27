@@ -11,9 +11,29 @@ services:
         environment: 
             - FLASK_APP=/usr/src/app/nestorfire/adapters/http/endpoints.py
             - FLASK_ENV=development
-            - APP_CONFIG=server.config_profiles.DevConfig
+            - APP_SETTINGS=server.config_profiles.DevConfig
         volumes:
             - .:/usr/src/app
+
+    worker:
+        image: api
+        command: python manage.py start_worker
+        volumes:
+            - .:/usr/src/app
+        environment: 
+            - APP_SETTINGS=server.config_profiles.DevConfig
+        depends_on:
+            - redis
+
+    scheduler:
+        image: api
+        command: python manage.py schedule_jobs
+        volumes:
+            - .:/usr/src/app
+        environment: 
+            - APP_SETTINGS=server.config_profiles.DevConfig
+        depends_on: 
+            - worker
 
     redis:
         image: redis:5.0.7-alpine
