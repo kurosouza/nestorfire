@@ -7,4 +7,5 @@ def create_app():
     app_settings = os.getenv('APP_SETTINGS')
     app.config.from_object(app_settings)
     app.register_blueprint(bp)
+    app.shell_context_processor({ "app" : app })
     return app

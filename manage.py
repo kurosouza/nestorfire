@@ -26,18 +26,24 @@ def schedule_jobs():
         scheduler = Scheduler(queue=q)
         scheduler.schedule(scheduled_time=datetime.datetime.utcnow(),
         func=import_fires,
-        interval= 2 * 60,
-        repeat=10
+        interval= 5 * 60,
+        repeat=3
         )
 
 @cli.command("view_scheduled_jobs")
 def view_schedules_jobs():
     with Connection(redis.from_url(app.config['REDIS_URL'])) as conn:
         q = Queue()
-        scheduler = Scheduler(queue=q)
+        scheduler = Scheduler(connection=conn)
         jobs_list = scheduler.get_jobs()
         for j in jobs_list:
             print(j)
+
+@cli.command("run_import_fires")
+def run_import_fires():
+    with Connection(redis.from_url(app.config['REDIS_URL'])) as con:
+        q = Queue()
+        task = q.enqueue(import_fires)
 
 if __name__ == "__main__":
     cli()

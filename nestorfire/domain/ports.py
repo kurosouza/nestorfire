@@ -86,5 +86,5 @@ class FireEntryViewBuilder:
 class FireDataSource(abc.ABC):
 
     @abc.abstractmethod
-    def get_data(self) -> List[FireEntry]:
+    def get_data(self) -> list:
         pass

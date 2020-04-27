@@ -27,7 +27,7 @@ services:
 
     scheduler:
         image: api
-        command: python manage.py schedule_jobs
+        command: rqscheduler --host redis --port 6379 --db 0
         volumes:
             - .:/usr/src/app
         environment: 
