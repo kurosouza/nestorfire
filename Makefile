@@ -12,3 +12,15 @@ lint:
 
 reformat:
 	black nestorfire
+
+start:
+	docker-compose up -d
+
+stop:
+	docker-compose down
+
+schedule-job:
+	docker-compose exec api python manage.py schedule_jobs
+
+view-scheduled-jobs:
+	docker-compose exec api python manage.py view_scheduled_jobs
