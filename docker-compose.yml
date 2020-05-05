@@ -9,9 +9,11 @@ services:
             - 5000:5000
         command: flask run -h 0.0.0.0
         environment: 
-            - FLASK_APP=/usr/src/app/nestorfire/adapters/http/endpoints.py
+            - FLASK_APP=manage:app
             - FLASK_ENV=development
             - APP_SETTINGS=server.config_profiles.DevConfig
+            - PYTHONDONTWRITEBYTECODE=1
+            - PYTHONUNBUFFERED=1
         volumes:
             - .:/usr/src/app
 

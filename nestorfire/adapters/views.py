@@ -44,11 +44,25 @@ class FireEntryListBuilder:
     def __init__(self, db):
         self.db = db
 
-    def fetch(self):
+    def fetch(self, limit = None, offset = None):
         session = self.db.get_session()
+
+        limit_fragment = ""
+        offset_fragment = ""
+
+        if  limit is not None:
+            limit_fragment = f" limit {int(limit)}"
+            print(f"got limit: {int(limit)}")
+
+        if offset is not None:
+            offset_fragment = f" offset {int(offset)}"
+            print(f"got offset: {int(offset)}")
+        
         query = session.execute(
             "SELECT fid, lat, lon, detection_date "
             + " FROM fires"
+            + limit_fragment
+            + offset_fragment
         )
 
         result = []
