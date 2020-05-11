@@ -4,3 +4,6 @@
 *.db-journal
 *.csv
 **__pycache__
+**/node_modules
+.next
+**/package-lock.json
