@@ -7,10 +7,14 @@
     "start": "next start"
   },
   "dependencies": {
-    "grommet": "^2.5.5",
+    "grommet": "^2.13.0",
+    "leaflet": "^1.6.0",
+    "mapbox-gl": "^1.10.0",
     "next": "latest",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
+    "react-leaflet": "^2.7.0",
+    "react-leaflet-universal": "^2.2.1",
     "styled-components": "^4.0.0"
   },
   "devDependencies": {
