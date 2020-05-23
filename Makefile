@@ -24,3 +24,6 @@ schedule-job:
 
 view-scheduled-jobs:
 	docker-compose exec api python manage.py view_scheduled_jobs
+
+dbview:
+	docker-compose exec postgis psql -Atx postgresql://user:secret@localhost:5432/gis

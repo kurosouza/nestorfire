@@ -9,9 +9,16 @@ from nestorfire.services import (
 import nestorfire.domain.messages as msg
 from nestorfire.domain.ports import MessageBus
 
-db = SqlAlchemy("sqlite:///nestorfire.db")
+import os
+# from dotenv import load_dotenv
+
+# load_dotenv()
+db_url = os.environ.get("DB_URL")
+
+db = SqlAlchemy(db_url)
 db.configure_mappings()
-db.create_schema()
+# db.drop_tables()
+db.create_tables()
 
 bus = MessageBus()
 db.associate_message_bus(bus)

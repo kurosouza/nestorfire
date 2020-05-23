@@ -24,11 +24,10 @@ def get_fire_info(fid):
 @bp.route("/fires", methods=["GET"])
 def list_fires():
     
-    limit = request.args['limit']
-
-    offset = request.args['offset']
+    limit = request.args.get('limit')
+    offset = request.args.get('offset')
 
     view_builder = config.fireentry_list_builder
-    view = view_builder.fetch(limit, offset)   
+    view = view_builder.fetch(limit, offset)
     
     return jsonify(view)

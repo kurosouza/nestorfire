@@ -7,25 +7,32 @@ services:
         container_name: api
         ports:
             - 5000:5000
-        command: flask run -h 0.0.0.0
+        # command: flask run -h 0.0.0.0
         environment: 
             - FLASK_APP=manage:app
             - FLASK_ENV=development
+            - DB_URL=postgresql://user:secret@postgis:5432/gis
             - APP_SETTINGS=server.config_profiles.DevConfig
             - PYTHONDONTWRITEBYTECODE=1
             - PYTHONUNBUFFERED=1
         volumes:
             - .:/usr/src/app
+        links: 
+            - postgis
+        depends_on: 
+            - postgis
 
     worker:
         image: api
-        command: python manage.py start_worker
+        command: ./start_worker.sh
         volumes:
             - .:/usr/src/app
         environment: 
+            - DB_URL=postgresql://user:secret@postgis:5432/gis
             - APP_SETTINGS=server.config_profiles.DevConfig
-        depends_on:
+        links: 
             - redis
+            - postgis
 
     scheduler:
         image: api
@@ -34,8 +41,38 @@ services:
             - .:/usr/src/app
         environment: 
             - APP_SETTINGS=server.config_profiles.DevConfig
+        links:
+            - redis
         depends_on: 
             - worker
 
     redis:
         image: redis:5.0.7-alpine
+
+    postgis:
+        image: postgis/postgis:9.6-2.5
+        volumes:
+            - pg_data:/var/lib/postgresql/data
+        environment: 
+            - POSTGRES_USER=user
+            - POSTGRES_PASSWORD=secret
+            - POSTGRES_DB=gis
+    
+    #postgis:
+    #    image: kartoza/postgis:9.6-2.4
+        
+    #    ports:
+    #        - 5433:5432
+
+    #    volumes:
+    #        - pg_data2:/var/lib/postgresql
+    #    environment: 
+    #        - POSTGRES_USER=alex
+    #        - POSTGRES_PASS=gis
+    #        - POSTGRES_DBNAME=gis
+    #        - ALLOW_IP_RANGE=0.0.0.0/0
+
+
+volumes: 
+    pg_data:
+

@@ -32,10 +32,9 @@ export default () => {
             <TextInput value={10} />
 
           </Box>
+          
           <Box margin="small" size='large' >
-
             <Map />
-
           </Box>
 
           <Heading>Grommet is awesome!</Heading>

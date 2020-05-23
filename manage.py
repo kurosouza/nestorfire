@@ -7,6 +7,7 @@ from rq_scheduler import Scheduler
 import datetime
 
 from nestorfire.adapters.cli.import_fires import import_fires
+from nestorfire.adapters.http.config import db
 
 app = create_app()
 cli = FlaskGroup(create_app=create_app)
@@ -31,7 +32,7 @@ def schedule_jobs():
         )
 
 @cli.command("view_scheduled_jobs")
-def view_schedules_jobs():
+def view_scheduled_jobs():
     with Connection(redis.from_url(app.config['REDIS_URL'])) as conn:
         q = Queue()
         scheduler = Scheduler(connection=conn)
@@ -44,6 +45,20 @@ def run_import_fires():
     with Connection(redis.from_url(app.config['REDIS_URL'])) as con:
         q = Queue()
         task = q.enqueue(import_fires)
+
+
+@cli.command("create_db")
+def create_db():
+    print("Creating database ..")
+    db.create_schema()
+    print("done.")
+
+@cli.command("drop_db")
+def drop_db():
+    print("Dropping database ..")
+    db.drop_schema()
+    print("done.")
+    
 
 if __name__ == "__main__":
     cli()

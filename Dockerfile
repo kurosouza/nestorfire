@@ -13,6 +13,11 @@ WORKDIR /usr/src/app
 
 ADD requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
+
+COPY ./startup.sh /usr/src/app/startup.sh
+
 COPY . /usr/src/app
 
 RUN pip install -e .
+
+CMD ["./startup.sh"]

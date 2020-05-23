@@ -111,6 +111,15 @@ class SqlAlchemy:
         create_database(self.engine.url)
         self.metadata.create_all()
 
+    def create_tables(self):
+        self.metadata.create_all()
+
+    def drop_tables(self):
+        self.metadata.drop_all()        
+
+    def drop_schema(self):
+        drop_database(self.engine.url)
+
     def get_session(self):
         return self._session_maker()
 
