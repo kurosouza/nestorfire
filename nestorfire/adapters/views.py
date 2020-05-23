@@ -67,7 +67,8 @@ class FireEntryListBuilder:
 
         result = []
         for r in query.fetchall():
-            r = read_uuid(r, "fid")
-            result.append(r)
+            # r = read_uuid(r, "fid") # Only enable for SQLite
+            row = dict(r.items())
+            result.append(row)
 
         return result
