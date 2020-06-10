@@ -27,3 +27,9 @@ view-scheduled-jobs:
 
 dbview:
 	docker-compose exec postgis psql -Atx postgresql://user:secret@localhost:5432/gis
+
+create_database:
+	docker-compose exec api python manage.py create_db
+
+drop_database:
+	docker-compose exec api python manage.py drop_db

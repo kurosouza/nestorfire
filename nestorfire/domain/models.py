@@ -10,3 +10,5 @@ class FireEntry:
         self.lat = lat
         self.lon = lon
         self.detection_date = datetime.datetime.now()
+        self.geom = "POINT({0} {1})".format(lat, lon)
+

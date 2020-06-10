@@ -15,6 +15,8 @@ from sqlalchemy import (
     create_engine,
     event,
 )
+from geoalchemy2 import Geometry
+
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker, composite, relationship
 import sqlalchemy.exc
 import sqlalchemy.orm.exc
@@ -96,7 +98,7 @@ class SqlAlchemyUnitOfWork(UnitOfWork):
 
 class SqlAlchemy:
     def __init__(self, uri):
-        self.engine = create_engine(uri)
+        self.engine = create_engine(uri, )
         self._session_maker = scoped_session(sessionmaker(self.engine),)
 
     @property
@@ -133,14 +135,16 @@ class SqlAlchemy:
             Column("fid", UUIDType, primary_key = True),
             Column("lat", Float),
             Column("lon", Float),
-            Column("detection_date", String(50))
+            Column("detection_date", String(50)),
+            Column("geom", Geometry("Point"))
         )
 
         mapper(FireEntry, fires, properties = {
             "fid": fires.c.fid,
             "lat": fires.c.lat,
             "lon": fires.c.lon,
-            "detection_date": fires.c.detection_date
+            "detection_date": fires.c.detection_date,
+            "geom": fires.c.geom
         })
 
 
