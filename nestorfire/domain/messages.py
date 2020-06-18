@@ -1,6 +1,7 @@
 from enum import Enum
 from uuid import UUID
 from typing import NamedTuple
+from datetime import datetime
 
 
 def event(cls):
@@ -27,6 +28,7 @@ class AddFireEntry(NamedTuple):
     lat: float
     lon: float
     created_on: str
+    acq_time: datetime
 
 
 @command

@@ -28,11 +28,17 @@ schedule-job:
 view-scheduled-jobs:
 	docker-compose exec api python manage.py view_scheduled_jobs
 
-dbview:
+db_connect:
 	docker-compose exec postgis psql -Atx postgresql://user:secret@localhost:5432/gis
 
 create_database:
 	docker-compose exec api python manage.py create_db
+
+create_tables:
+	docker-compose exec api python manage.py create_tables
+
+drop_tables:
+	docker-compose exec api python manage.py drop_tables
 
 # drop_database:
 #	docker-compose exec api python manage.py drop_db

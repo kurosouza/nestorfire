@@ -13,13 +13,11 @@ def report_fire():
     config.bus.handle(cmd)
     return "", 201, {"Location": "/fires/" + str(fid)}
 
-
 @bp.route("/fires/<fid>")
 def get_fire_info(fid):
     view_builder = config.fireentry_view_builder
     view = view_builder.fetch(uuid.UUID(fid))
     return jsonify(view)
-
 
 @bp.route("/fires", methods=["GET"])
 def list_fires():

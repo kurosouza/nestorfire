@@ -66,6 +66,12 @@ def create_tables():
     print("Creating tables ..")
     db.create_tables()
     print("done.")
+
+@cli.command("drop_tables")
+def drop_tables():
+    print("Dropping tables ..")
+    db.drop_tables()
+    print("done.")
     
 
 if __name__ == "__main__":

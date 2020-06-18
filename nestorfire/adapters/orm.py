@@ -11,6 +11,7 @@ from sqlalchemy import (
     Integer,
     Float,
     Text,
+    DateTime,
     ForeignKey,
     create_engine,
     event,
@@ -136,6 +137,7 @@ class SqlAlchemy:
             Column("lat", Float),
             Column("lon", Float),
             Column("detection_date", String(50)),
+            Column("acq_time", DateTime),
             Column("geom", Geometry("Point"))
         )
 
@@ -143,6 +145,7 @@ class SqlAlchemy:
             "fid": fires.c.fid,
             "lat": fires.c.lat,
             "lon": fires.c.lon,
+            "acq_time": fires.c.acq_time,
             "detection_date": fires.c.detection_date,
             "geom": fires.c.geom
         })

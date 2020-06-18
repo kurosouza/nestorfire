@@ -8,7 +8,7 @@ class CreateFireEntryHandler:
         self.uowm = uowm
 
     def handle(self, cmd):
-        fire_entry = FireEntry(cmd.fid, cmd.lat, cmd.lon)
+        fire_entry = FireEntry(cmd.fid, cmd.lat, cmd.lon, cmd.acq_time)
         with self.uowm.start() as tx:
             tx.fires.add(fire_entry)
             tx.commit()
