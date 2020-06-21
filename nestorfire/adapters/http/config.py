@@ -1,7 +1,7 @@
 import logging
 
 from ..orm import SqlAlchemy
-from ..views import FireEntryListBuilder, FireEntryViewBuilder
+from ..views import FireEntryListBuilder, FireEntryViewBuilder, FireEntryQueryBuilder
 from nestorfire.services import (
     CreateFireEntryHandler,
 )
@@ -25,6 +25,7 @@ db.associate_message_bus(bus)
 
 fireentry_view_builder = FireEntryViewBuilder(db)
 fireentry_list_builder = FireEntryListBuilder(db)
+fireentry_query_builder = FireEntryQueryBuilder(db)
 
 create_fireentry = CreateFireEntryHandler(db.unit_of_work_manager)
 

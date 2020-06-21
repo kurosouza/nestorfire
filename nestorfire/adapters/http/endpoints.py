@@ -21,11 +21,23 @@ def get_fire_info(fid):
 
 @bp.route("/fires", methods=["GET"])
 def list_fires():
-    
     limit = request.args.get('limit')
     offset = request.args.get('offset')
 
     view_builder = config.fireentry_list_builder
     view = view_builder.fetch(limit, offset)
     
+    return jsonify(view)
+
+@bp.route("/find_fires", methods=["GET"])
+def list_fires_for():
+    r_data = request.get_json();
+    start_date = r_data.get("start")
+    end_date = r_data.get("end")
+    country = r_data.get("country")
+
+    print("start = {}, end_date = {}, country = {}".format(start_date, end_date, country))
+    view_builder = config.fireentry_query_builder
+    view = view_builder.fetch(start_date, end_date, country)
+
     return jsonify(view)

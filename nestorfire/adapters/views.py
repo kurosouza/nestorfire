@@ -72,3 +72,31 @@ class FireEntryListBuilder:
             result.append(row)
 
         return result
+
+
+class FireEntryQueryBuilder:
+
+    _q = "select f.fid, f.lat, f.lon from fires f, countries c " + \
+        " where f.acq_time::date between date('{0}') and date('{1}')" + \
+        " and ST_Contains(c.geom, f.geom) " + \
+        " and 'c.ADMIN' = '{2}'"
+
+    def __init__(self,db):
+        self.db = db
+        
+
+    def fetch(self, start_date, end_date, country: str):
+        query_str = str.format(self._q, start_date, end_date, country)
+        session = self.db.get_session()
+
+        print('Executing query: {0}'.format(query_str))
+        
+        query = session.execute(query_str)
+
+        result = []
+        for r in query.fetchall():
+            row = dict(r.items())
+            result.append(row)
+
+        return result
+        
